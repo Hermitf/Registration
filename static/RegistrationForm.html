@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>计算机协会报名表</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We"
+      crossorigin="anonymous"
+    />
+    <link rel="icon" href="./favicon.ico" type="image/x-icon">
+    <!-- <link rel="shortcut icon" href="./favicon.ico"> -->
+    <link rel="stylesheet" href="./decoration.css" />
+  </head>
+  <body>
+    <div class="container">
+      <div class="card">
+        <header>报名表</header>
+        <form
+          class="col-xl-5 col-xxl-5 col-lg-6 col-md-9 col-sm-10 col-12"
+          id="frm"
+        >
+          <table>
+            <colgroup>
+              <col
+                class="col-xl-2 col-xxl-2 col-lg-2 col-md-2 col-sm-3 col-3"
+              />
+              <col />
+            </colgroup>
+            <tr>
+              <td><span class="name">姓名</span></td>
+              <td><input type="text" required name="name" /></td>
+            </tr>
+            <tr>
+              <td><span class="name">性别</span></td>
+              <td>
+                <div style="display: inline; margin-right: 30px">
+                  <input
+                    type="radio"
+                    id="male"
+                    name="sex"
+                    value="男"
+                    checked
+                  />
+                  <label for="male">男</label>
+                </div>
+                <div style="display: inline">
+                  <input type="radio" id="female" name="sex" value="女" />
+                  <label for="female">女</label>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td><span class="name">学号</span></td>
+              <td><input type="number" name="studentID" required /></td>
+            </tr>
+            <tr>
+              <td><span class="name">学院</span></td>
+              <td><input type="text" required name="college" /></td>
+            </tr>
+            <tr>
+              <td><span class="name">班级</span></td>
+              <td><input type="text" name="class" required /></td>
+            </tr>
+            <tr>
+              <td><span class="name">QQ</span></td>
+              <td><input type="number" name="qq" required /></td>
+            </tr>
+            <tr>
+              <td><span class="name">电话</span></td>
+              <td><input type="tel" name="phoneNumber" required /></td>
+            </tr>
+            <tr>
+              <td><span class="name">第一志愿</span></td>
+              <td>
+                <select name="department1" required>
+                  <option value="0">请选择部门</option>
+                  <option value="1">软件研发部</option>
+                  <option value="2">硬件维修部</option>
+                  <option value="3">数字媒体部</option>
+                </select>
+              </td>
+            </tr>
+            <tr>
+              <td><span class="name" >申请原因</span></td>
+              <td><textarea rows="2" name="reason1"></textarea></td>
+            </tr>
+            <tr>
+              <td><span class="name">第二志愿</span></td>
+              <td>
+                <select name="department2" required>
+                  <option value="0">请选择部门</option>
+                  <option value="1">软件研发部</option>
+                  <option value="2">硬件维修部</option>
+                  <option value="3">数字媒体部</option>
+                </select>
+              </td>
+            </tr>
+            <tr>
+              <td><span class="name">申请原因</span></td>
+              <td><textarea rows="2" name="reason2"></textarea></td>
+            </tr>
+            <tr>
+              <td><span class="name">兴趣爱好</span></td>
+              <td><textarea rows="2" name="interest"></textarea></td>
+            </tr>
+          </table>
+          <div class="sizee">
+            <input type="button" value="提  交" onclick="MyFunction();"/>
+          </div>
+        </form>
+      </div>
+    </div>
+  </body>
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js"></script>
+  <script>
+      function MyFunction(){
+          var fd=new FormData($("#frm")[0]);
+          fd.append("name","")
+          // name=fd.get("name");
+          // sex=fd.get("sex")
+          studentID=fd.get("studentID");
+          // college=fd.get("college");
+          // class=fd.get("class");
+          // qq=fd.get("qq");
+          // phoneNumber=fd.get("phoneNumber");
+          department1=fd.get("department1");
+          // reason1=fd.get("reason1");
+          department2=fd.get("department2");
+          // reason2=fd.get("reason2");
+          // interest=fd.get("interest");
+          if(studentID.length!==13){
+              alert("请输入正确的学号长度");
+              return;
+          }
+          if(department1==="0" && department2==="0"){
+              alert("所选部门不可为空");
+              return;
+          }
+          // console.log(fd)
+          $.ajax({
+              url:"./submit",
+              type:"POST",
+              data:fd,
+              processData:false,
+              contentType:false,
+              success:(data,status,xhr)=>{
+                  if(data==="True") {
+                     (document.getElementsByClassName("card"))[0].innerHTML="<h2>报名成功</h2>"
+                    }
+                    else{
+                    console.log(data)
+                    alert("服务器内部错误")
+
+                  }
+              },
+              error:()=>{
+                  alert("网络错误")
+              }
+          })
+      }
+  </script>
+</html>
